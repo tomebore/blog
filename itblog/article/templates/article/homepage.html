@@ -3,7 +3,18 @@
 {%  block content %} 
     <h1>Article</h1>
     {%  for a  in art %}
-        <li>{{a.title}} -  {{a.text}} </li>
+        <li><b>{{a.title}} </b><br>
+            {{a.text}}
+            <br>
+            <i>{{a.author}} </i>
+            <br>
+            {{ a.comments}}
+         </li>
+            <hr>
+    {% endfor %}
+ 
+    {% for art in  wind.art.all %} 
+    <li>{{ art.title }}></li>
     {% endfor %}
 
 {%   endblock %} 
