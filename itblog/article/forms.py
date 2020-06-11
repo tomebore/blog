@@ -7,4 +7,8 @@ class ArticleForm(forms.ModelForm):
         fields = ['title' , 'text' , 'author']
 
 
+class AuthorForm(forms.ModelForm):
+    class Meta:
+        model = Author
+        fields = ['name' , 'user']
 

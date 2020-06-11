@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponse
 from .models import   *
 from django.contrib.auth.models import User
-from .forms import   ArticleForm
+from .forms import  *
 
 # Create your views here.
 def homepage(request):
@@ -15,8 +15,8 @@ def homepage(request):
 def authors(request):
     authors = Article.objects.all()
     # authors.name = request.POST.get("name")
-    return render(request  , "article/authors.html",
-                  {"name":authors})
+    return render(request  , "article/author.html",
+                  {"authors":authors})
 
 def users(request):
     # context = {}
@@ -43,11 +43,26 @@ def add_article(request):
     forms =  ArticleForm()
     return render(request, "article/add_article.html", {'forms': forms})
 
-def  author_info(request,pk):
-    article = Article.objects.get(pk=pk)
+def  profile(request, pk):
+    author = Author.objects.get(pk=pk)
+    return render(request, "article/profile.html", {'author': author})
     
-    return render(request, "article/author_info.html", { "art": articles})
 
- 
+def  add_author(request):
+    if request.method == "GET":
+        form = AuthorForm()
+        context = {}
+        context["form"] = form
+        return render(request, "article/add_author.html", context)
+    elif request.method == "POST":
+        name = request.POST.get("name")
+        user_id = request.POST.get("user")
+        user = USer.objects.get(id = user_id)
+        author = Author(name=name , user= user)
+        author.save()
+        return render(request , "article/succsess.html")  
+        
+   
+    
 
 
