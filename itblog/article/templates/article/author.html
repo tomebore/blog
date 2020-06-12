@@ -2,14 +2,15 @@
 
 {%  block content %} 
     
-        
-     <h3> - {{authors.author}} -</h3>
+      {% for a in authors %}
+     <h3> - {{a.name}} -</h3>
       
               
-     <h4> publications  - {{ authors.text.count}} </h4>
+     <h4> publications  - {{a.articles.count  }} </h4>
               
 
       <hr>
+      {% endfor %}
        
 
 

@@ -13,7 +13,7 @@ def homepage(request):
     return render(request , "article/homepage.html", {"art": articles ,}) 
 
 def authors(request):
-    authors = Article.objects.all()
+    authors = Author.objects.all()
     # authors.name = request.POST.get("name")
     return render(request  , "article/author.html",
                   {"authors":authors})
@@ -31,15 +31,20 @@ def detai(request, pk):
 
 def add_article(request):
     if request.method == "POST":
-        article  = Article()
-        article.title = request.POST.get("title")
-        article.text = request.POST.get("text")
-        author_id = request.POST.get("author")
-        author = Author.objects.get(id = author_id )
-        article.author = author
-        article.save() 
+        form = ArticleForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request , "article/succsess.html")
 
-        return render(request , "article/succsess.html")
+        # article  = Article()
+        # article.title = request.POST.get("title")
+        # article.text = request.POST.get("text")
+        # author_id = request.POST.get("author")
+        # author = Author.objects.get(id = author_id )
+        # article.author = author
+        # article.save() 
+
+    #     # return render(request , "article/succsess.html")
     forms =  ArticleForm()
     return render(request, "article/add_article.html", {'forms': forms})
 
@@ -49,18 +54,15 @@ def  profile(request, pk):
     
 
 def  add_author(request):
-    if request.method == "GET":
-        form = AuthorForm()
-        context = {}
-        context["form"] = form
-        return render(request, "article/add_author.html", context)
-    elif request.method == "POST":
-        name = request.POST.get("name")
-        user_id = request.POST.get("user")
-        user = USer.objects.get(id = user_id)
-        author = Author(name=name , user= user)
-        author.save()
-        return render(request , "article/succsess.html")  
+    if request.method =="POST":
+        form = AuthorForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request ,  "article/succsess.html")
+    form =  AuthorForm()
+    return render(request, "article/add_author.html", {'form': form})
+
+
         
    
     
