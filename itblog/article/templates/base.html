@@ -22,17 +22,18 @@
             <li class="nav-item active">
                 <a class="nav-link" href="/users">User </a>
             </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'add_article' %}"> add-article </a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'add_author' %}"> add-author </a>
-            </li>
-          
-           
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> add</a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="{% url 'add_article' %}">add-article</a>
+                  <a class="dropdown-item" href="{% url 'add_author' %}">add-author</a>
+                  
+                </div>
+              </li>
           </ul>
 
     </nav>
+    
     <div class="container">
     {%  block content  %}  {%   endblock %}
     </div>

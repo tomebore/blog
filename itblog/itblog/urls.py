@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from article.views import homepage , authors , users, detai, add_article  , profile , add_author
+from article.views import homepage , authors , users, detai, add_article  , profile , add_author ,edit_article
+from django.conf import settings
+from django.conf.urls.static import static 
 
 
 urlpatterns = [
@@ -25,9 +27,9 @@ urlpatterns = [
     path("article/add/" , add_author, name='add_author'),
     path("users/" , users),
     path("article/<int:pk>/" , detai),
+    path("article/edit/<int:pk>/" , edit_article , name='edit_article'),
     path("add/article/" , add_article, name='add_article'),
     path("profile/<int:pk>/" , profile, name='profile'),
     path("article/add/" , add_author, name='add_author')
-
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

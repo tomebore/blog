@@ -8,7 +8,7 @@ def homepage(request):
     article =Article.objects.filter(active=True)
     articles = Article.objects.all()
     wind = Author.objects.get(id=2)
-    
+    #  articles = Article.objects.raw("SELECT * FROM  aricle_article WHERE active = 0 ")  #0- false 1-True 
 
     return render(request , "article/homepage.html", {"art": articles ,}) 
 
@@ -28,6 +28,17 @@ def users(request):
 def detai(request, pk):
     article = Article.objects.get(pk=pk)
     return render(request, "article.html", {'article':article})
+
+def edit_article(request,pk):
+    article = Article.objects.get(pk=pk)
+    if request.method == "POST":
+        form = ArticleForm(request.POST , instance=article)
+        if form.is_valid():
+            form.save()
+            return render(request , "article/succsess.html")
+
+    forms = ArticleForm(instance=article)
+    return render(request ,"article/add_article.html", {'forms':forms})
 
 def add_article(request):
     if request.method == "POST":
