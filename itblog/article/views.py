@@ -7,10 +7,11 @@ from .forms import  *
 def homepage(request):
     article =Article.objects.filter(active=True)
     articles = Article.objects.all()
-    wind = Author.objects.get(id=2)
+    
+
     #  articles = Article.objects.raw("SELECT * FROM  aricle_article WHERE active = 0 ")  #0- false 1-True 
 
-    return render(request , "article/homepage.html", {"art": articles ,}) 
+    return render(request , "article/homepage.html", locals() ) 
 
 def authors(request):
     authors = Author.objects.all()
@@ -27,7 +28,8 @@ def users(request):
 
 def detai(request, pk):
     article = Article.objects.get(pk=pk)
-    return render(request, "article.html", {'article':article})
+    comment = Comment.objects.all()
+    return render(request, "article.html", {'article':article , "comment": comment})
 
 def edit_article(request,pk):
     article = Article.objects.get(pk=pk)
@@ -61,7 +63,9 @@ def add_article(request):
 
 def  profile(request, pk):
     author = Author.objects.get(pk=pk)
-    return render(request, "article/profile.html", {'author': author})
+    commet = Comment.objects.get(pk=pk)
+
+    return render(request, "article/profile.html", locals())
     
 
 def  add_author(request):
@@ -74,7 +78,14 @@ def  add_author(request):
     return render(request, "article/add_author.html", {'form': form})
 
 
-        
+def   add_comment(request):
+    if request.method =="POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request ,  "article/succsess.html")
+    form =  CommentForm()
+    return render(request, "article/add_comment.html", {'form': form})     
    
     
 

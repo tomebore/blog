@@ -8,6 +8,9 @@ class Author(models.Model):
     name = models.CharField(max_length=255)
     photo = models.ImageField(upload_to="author_photo", null=True , blank=True)
     user = models.OneToOneField(User, on_delete = models.SET_NULL, related_name = "author",null= True , blank = True)
+
+    def __str__(self):
+        return self.name  
     
 
 
@@ -29,7 +32,8 @@ class Article(models.Model):
  
 class Comment(models.Model):
     text = models.TextField()
-    article = models.ForeignKey(Author, on_delete=models.SET_NULL , related_name = "author",null =True , blank=True)  
+    post = models.ForeignKey(Article, on_delete=models.SET_NULL , related_name = "article",null =True , blank=True)  
+    author = models.ForeignKey(Author, on_delete=models.CASCADE , related_name = "author",null =True , blank=True)  
     user = models.ForeignKey(User , on_delete = models.CASCADE , related_name = "comment", default = "")
 
     def __str__(self):

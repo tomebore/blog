@@ -10,5 +10,10 @@ class ArticleForm(forms.ModelForm):
 class AuthorForm(forms.ModelForm):
     class Meta:
         model = Author
-        fields = ['name' , 'user']
+        fields = ['name' , 'user' , 'photo']
 
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model =  Comment
+        fields = ['text' , 'user' , 'post']
