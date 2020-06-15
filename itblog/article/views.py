@@ -20,7 +20,7 @@ def authors(request):
                   {"authors":authors})
 
 def users(request):
-    # context = {}
+    # context = {}      
     # context["user_all"]= User.object.all()
     users_all = User.objects.all()
     return render(request  , "article/users.html",
@@ -28,8 +28,12 @@ def users(request):
 
 def detai(request, pk):
     article = Article.objects.get(pk=pk)
-    comment = Comment.objects.all()
-    return render(request, "article.html", {'article':article , "comment": comment})
+    comment_id = request.GET.get("text")
+    comment = Comment.objects.filter(pk=comment_id)
+
+ 
+    return render(request, "article.html", locals())
+    
 
 def edit_article(request,pk):
     article = Article.objects.get(pk=pk)
@@ -63,7 +67,7 @@ def add_article(request):
 
 def  profile(request, pk):
     author = Author.objects.get(pk=pk)
-    commet = Comment.objects.get(pk=pk)
+   
 
     return render(request, "article/profile.html", locals())
     

@@ -9,9 +9,9 @@
     <h4> Author : {{article.author}} <br> 
          Likes:{{article.likes}} <br>
          readed by  :{{article.readers.count}}</h4>
-         {% for com in comment %}
-              <p>{{ com.text }}</p>
-         {% endfor %}
+         -- {{article.article.count}}
+         -{{comment.text}}
+      
     <ul>
         {% for reader in article.readers.all %}
         <li> {{reader}}</li>
