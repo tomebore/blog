@@ -5,7 +5,7 @@ from .forms import  *
 
 # Create your views here.
 def homepage(request):
-    article =Article.objects.filter(active=True)
+    article =Article.objects.filter(active=True).order_by("title")
     articles = Article.objects.all()
     
 
@@ -27,15 +27,39 @@ def users(request):
                   {"users_all":users_all})
 
 def detai(request, pk):
-    article = Article.objects.get(pk=pk)
-    comment_id = request.GET.get("text")
-    comment = Comment.objects.filter(pk=comment_id)
+    if request.method =="POST":
+        if "delete_btn" in request.POST:
+            article = Article.objects.get(pk=pk)
+            article.active = False
+            article.save()
+            return redirect(homepage)
+        elif "add_comment_btn" in request.POST:
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                comment = Comment()
+                comment.user = request.user 
+                comment.article  = article
+                comment.text = form.cleaned_data["text"]
+                comment.save()
+                # user = request.user 
+                # comment = Comment(
+                #     user=user,
+                #     article= article, 
+                #     text=form.cleaned_data["text"] 
+                # )
+                # comment.save()
+
+    context = {}
+    context["article"] = Article.objects.get(pk=pk)
+    context["form"] = CommentForm()
+    # comment_id = request.GET.get("text")
+    # comment = Comment.objects.filter(pk=comment_id)
 
  
-    return render(request, "article.html", locals())
+    return render(request, "article.html", context )
     
 
-def edit_article(request,pk):
+def edit_article (request,pk):
     article = Article.objects.get(pk=pk)
     if request.method == "POST":
         form = ArticleForm(request.POST , instance=article)
@@ -45,6 +69,7 @@ def edit_article(request,pk):
 
     forms = ArticleForm(instance=article)
     return render(request ,"article/add_article.html", {'forms':forms})
+
 
 def add_article(request):
     if request.method == "POST":
@@ -82,14 +107,18 @@ def  add_author(request):
     return render(request, "article/add_author.html", {'form': form})
 
 
-def   add_comment(request):
-    if request.method =="POST":
-        form = CommentForm(request.POST)
+
+def edit_comment (request,pk):
+    comment = Comment.objects.get(pk=pk)
+    if request.method == "POST":
+        form = CommentForm(request.POST , instance=comment)
         if form.is_valid():
             form.save()
-            return render(request ,  "article/succsess.html")
-    form =  CommentForm()
-    return render(request, "article/add_comment.html", {'form': form})     
+            return render(request , "article/succsess.html")
+
+    forms = CommentForm(instance=comment)
+    return render(request ,"article/comment_form.html", {'forms':forms})
+       
    
     
 

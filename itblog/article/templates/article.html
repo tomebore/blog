@@ -1,4 +1,5 @@
 {% extends 'base.html' %} 
+{% load bootstrap4 %}
 
 {%  block content %} 
     <h2> {{article.title}}</h2>
@@ -8,10 +9,11 @@
     <br>
     <h4> Author : {{article.author}} <br> 
          Likes:{{article.likes}} <br>
-         readed by  :{{article.readers.count}}</h4>
-         -- {{article.article.count}}
-         -{{comment.text}}
-      
+         readed by  :{{article.readers.count}}
+         Date of pablictation : {{article.publication_date}}
+         Updated date : {{article.updated_date}}
+        </h4> 
+
     <ul>
         {% for reader in article.readers.all %}
         <li> {{reader}}</li>
@@ -22,10 +24,25 @@
   
     <br>
     <br>
-    <from action="POST">
+    <from method="POST">
         {% csrf_token %}
-        <button class="btn btn-lg btn-danger"> DELETE  </button>
-    </from> 
+        <button  name="delete_btn" class="btn btn-lg btn-danger"> DELETE  </button>
+    </from>
+    <hr>
+    <form  method="POST">
+        {% csrf_token %}
+        {%  bootstrap_form form %}
+        <button name="add_comment_btn" class="btn btn-primary "> Add  </button>
+
+    </form> 
+    <h1> comments : </h1>
+         {%  for comment in article.comment.all %} 
+         <div>{{ comment.text }} </div>
+         <i> {{comment.user.get_full_name  }}</i>
+
+
+
+         {% endfor %}
    
  
     
