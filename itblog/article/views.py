@@ -8,6 +8,17 @@ def homepage(request):
     article =Article.objects.filter(active=True).order_by("title")
     articles = Article.objects.all()
 
+    if request.method =="POST":
+        key = request.POST.get("key_word")
+        article = Article.objects.filter(active=True).filter(
+            title__contains=key)|Article.objects.filter(active=True).filter(
+            text__contains=key)|Article.objects.filter(active=True).filter(
+            tags__name__contains=key)|Article.objects.filter(active=True).filter(
+            author__name__contains=key)
+    # else:
+    #     article =Article.objects.filter(active=True).order_by("title")
+
+
     #  articles = Article.objects.raw("SELECT * FROM  aricle_article WHERE active = 0 ")  #0- false 1-True 
 
     return render(request , "article/homepage.html", locals() ) 
@@ -69,7 +80,7 @@ def detai(request, pk):
 def edit_article (request,pk):
     article = Article.objects.get(pk=pk)
     if request.method == "POST":
-        form = ArticleForm(request.POST , instance=article)
+        form = ArticleForm(request.POST ,request.FILES, instance=article)
         if form.is_valid():
             form.save()
             return render(request , "article/succsess.html")
@@ -80,7 +91,7 @@ def edit_article (request,pk):
 
 def add_article(request):
     if request.method == "POST":
-        form = ArticleForm(request.POST)
+        form = ArticleForm(request.POST ,request.FILES)
         if form.is_valid():
             form.save()
             return render(request , "article/succsess.html")
