@@ -7,7 +7,6 @@ from .forms import  *
 def homepage(request):
     article =Article.objects.filter(active=True).order_by("title")
     articles = Article.objects.all()
-    
 
     #  articles = Article.objects.raw("SELECT * FROM  aricle_article WHERE active = 0 ")  #0- false 1-True 
 
@@ -27,6 +26,14 @@ def users(request):
                   {"users_all":users_all})
 
 def detai(request, pk):
+    article = Article.objects.get(pk=pk)
+    article.views +=1
+    user = request.user
+    if not user.is_anonymous:
+        article.readers.add(user)
+    article.save()
+
+
     if request.method =="POST":
         if "delete_btn" in request.POST:
             article = Article.objects.get(pk=pk)

@@ -12,6 +12,10 @@ class Author(models.Model):
     def __str__(self):
         return self.name  
     
+    class Meta:
+        verbose_name = "автор" 
+        verbose_name_plural = "авторы"
+    
 
 
 
@@ -40,6 +44,10 @@ class Article(models.Model):
     def __str__(self):
         return self.title 
 
+    class Meta:
+        verbose_name = "статья" 
+        verbose_name_plural = "статьи"      
+
  
 class Comment(models.Model):
     text = models.TextField()
@@ -57,5 +65,9 @@ class Comment(models.Model):
 
 class Tag (models.Model):
     name = models.CharField(max_length=55)
+
+    class Meta:
+        verbose_name = "тег" 
+        verbose_name_plural = "теги"
     
 

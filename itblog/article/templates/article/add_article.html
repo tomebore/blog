@@ -3,7 +3,7 @@
 
 {%  block content %} 
     <h2> Добавление статьи</h2>
-    <form method="POST">
+    <form method="POST" enctype="multipart/from-date">
         {% csrf_token %}
         {% bootstrap_form forms %}
         <button class="btn btn-lg btn-info" > Send </button>
