@@ -51,7 +51,7 @@ class Article(models.Model):
  
 class Comment(models.Model):
     text = models.TextField()
-    post = models.ForeignKey(Article, on_delete=models.SET_NULL , related_name = "article",null =True , blank=True)  
+    post = models.ForeignKey(Article, on_delete=models.SET_NULL , related_name = "comments",null =True , blank=True)  
     author = models.ForeignKey(Author, on_delete=models.CASCADE , related_name = "author",null =True , blank=True)  
     user = models.ForeignKey(User , on_delete = models.CASCADE , related_name = "comment", default = "")
 

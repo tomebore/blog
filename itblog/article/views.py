@@ -14,7 +14,10 @@ def homepage(request):
             title__contains=key)|Article.objects.filter(active=True).filter(
             text__contains=key)|Article.objects.filter(active=True).filter(
             tags__name__contains=key)|Article.objects.filter(active=True).filter(
-            author__name__contains=key)
+            readers__username__contains=key)|Article.objects.filter(active=True).filter(
+            picture__contains=key)|Article.objects.filter(active=True).filter(
+            comments__text__contains=key)
+        article = article.distinct()
     # else:
     #     article =Article.objects.filter(active=True).order_by("title")
 
