@@ -5,7 +5,7 @@
 
     <h1>Article</h1>
     {%  for a  in article %}
-        <li> <a href="/article/{{a.pk}}/">{{a.title}} </a>
+        <h3 pk="article{{a.pk}}"> <a href="/article/{{a.pk}}/">{{a.title}} </a> </h3>
            <i> <a href="{% url 'profile' a.author.pk %}"> author -  {{a.author}}  </a> </i>
            <h4> readers - {{ a.readers.count}} </h4>
            <h4>likes - {{ a.likes}}</h4>

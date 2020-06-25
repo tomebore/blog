@@ -2,9 +2,10 @@ from django import forms
 from .models import *
 
 class ArticleForm(forms.ModelForm):
+    tag = forms.CharField(max_length=255)
     class Meta:
         model = Article 
-        fields = ['title' , 'text', 'picture' ,'tags']
+        fields = ['title' , 'text', 'picture' ,'tag']
 
 
 class AuthorForm(forms.ModelForm):

@@ -5,11 +5,10 @@ from .forms import  *
 
 # Create your views here.
 def homepage(request):
-    article =Article.objects.filter(active=True).order_by("title")
-    articles = Article.objects.all()
-
-    if request.method =="POST":
-        key = request.POST.get("key_word")
+    # article =Article.objects.filter(active=True).order_by("title")
+    # articles = Article.objects.all()
+    if  "key_word" in request.GET:
+        key = request.GET.get("key_word")
         article = Article.objects.filter(active=True).filter(
             title__contains=key)|Article.objects.filter(active=True).filter(
             text__contains=key)|Article.objects.filter(active=True).filter(
@@ -18,10 +17,8 @@ def homepage(request):
             picture__contains=key)|Article.objects.filter(active=True).filter(
             comments__text__contains=key)
         article = article.distinct()
-    # else:
-    #     article =Article.objects.filter(active=True).order_by("title")
-
-
+    else:
+        article =Article.objects.filter(active=True)
     #  articles = Article.objects.raw("SELECT * FROM  aricle_article WHERE active = 0 ")  #0- false 1-True 
 
     return render(request , "article/homepage.html", locals() ) 
@@ -96,7 +93,28 @@ def add_article(request):
     if request.method == "POST":
         form = ArticleForm(request.POST ,request.FILES)
         if form.is_valid():
-            form.save()
+            if not  Author.objects.filter(user=request.user):
+                author =  Author(
+                    user= request.user ,
+                    name= request.user.username 
+                )
+                author.save()
+            else:
+                author = Author.objects.get(user=request.user )
+            article = Article()
+            article.author = author
+            article.title = form.cleaned_data["title"]
+            article.text = form.cleaned_data["text"]
+            article.picture = form.cleaned_data["picture"]
+
+
+            tag = form.cleaned_data["tag"]
+            for t in  tag.split(","):
+                obj,created = Tag.objects.get_or_create(name=t)
+                article.tag.add(obj)
+               
+
+            article.save()
             return render(request , "article/succsess.html")
 
         # article  = Article()
