@@ -138,7 +138,7 @@ def add_article(request):
             tag = form.cleaned_data["tag"]
             for t in  tag.split(","):
                 obj,created = Tag.objects.get_or_create(name=t)
-                article.tag.add(obj)
+                article.t.add(obj)
                
 
             article.save()
