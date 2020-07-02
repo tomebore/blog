@@ -2,16 +2,22 @@
 {% load bootstrap4 %}
 
 {%  block content %} 
+    {% include "includes/message.html" %}
     <h2> {{article.title}}</h2>
+  
+       {% for tag in article.tag.all %}
+          <button> {{ tag.name}}</button>
+       {% endfor %}
+   
     <div>
-        {{article.text}}
+        {{article.text|linebreaks}}
     </div>
     <br>
     <h4> Author : {{article.author}} <br> 
          Likes:{{article.likes}} <br>
          readed by  :{{article.readers.count}} <br>
          seen by : {{ article.views }} <br>
-         Date of pablictation : {{article.publication_date}} <br>
+         Date of pablictation : {{article.publication_date|date:"d.m.Y H:i"}} <br>
          Updated date : {{article.updated_date}} 
         </h4> 
 

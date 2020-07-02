@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse
 from .models import   *
 from django.contrib.auth.models import User
 from .forms import  *
+from django.db.models import Q
 
 # Create your views here.
 def homepage(request):
@@ -9,13 +10,18 @@ def homepage(request):
     # articles = Article.objects.all()
     if  "key_word" in request.GET:
         key = request.GET.get("key_word")
-        article = Article.objects.filter(active=True).filter(
-            title__contains=key)|Article.objects.filter(active=True).filter(
-            text__contains=key)|Article.objects.filter(active=True).filter(
-            tags__name__contains=key)|Article.objects.filter(active=True).filter(
-            readers__username__contains=key)|Article.objects.filter(active=True).filter(
-            picture__contains=key)|Article.objects.filter(active=True).filter(
-            comments__text__contains=key)
+        # article = Article.objects.filter(active=True).filter(
+        #     title__contains=key)|Article.objects.filter(active=True).filter(
+        #     text__contains=key)|Article.objects.filter(active=True).filter(
+        #     tags__name__contains=key)|Article.objects.filter(active=True).filter(
+        #     readers__username__contains=key)|Article.objects.filter(active=True).filter(
+        #     picture__contains=key)|Article.objects.filter(active=True).filter(
+        #     comments__text__contains=key)
+
+        article = Article.objects.filter(Q(active=True) , Q(title__contains=key) , 
+                                        Q(text__contains=key) | Q(tags__name__contains=key)|
+                                        Q(readers__username__contains=key)| Q(picture__contains=key)|
+                                        Q(picture__contains=key)| Q(comments__text__contains=key))
         article = article.distinct()
     else:
         article =Article.objects.filter(active=True)
@@ -79,11 +85,32 @@ def detai(request, pk):
 
 def edit_article (request,pk):
     article = Article.objects.get(pk=pk)
+
     if request.method == "POST":
-        form = ArticleForm(request.POST ,request.FILES, instance=article)
+        form = ArticleForm(request.POST ,request.FILES)
         if form.is_valid():
-            form.save()
+            author = Author.objects.get(user=request.user )
+            article = Article()
+            article.author = author
+            article.title = form.cleaned_data["title"]
+            article.text = form.cleaned_data["text"]
+            article.picture = form.cleaned_data["picture"]
+
+
+            tag = form.cleaned_data["tag"]
+            for t in  tag.split(","):
+                obj,created = Tag.objects.get_or_create(name=t)
+                article.tag.add(obj)
+               
+
+            article.save()
             return render(request , "article/succsess.html")
+
+    # if request.method == "POST":
+    #     form = ArticleForm(request.POST ,request.FILES, instance=article)
+    #     if form.is_valid():
+    #         form.save()
+    #         return render(request , "article/succsess.html")
 
     forms = ArticleForm(instance=article)
     return render(request ,"article/add_article.html", {'forms':forms})

@@ -2,6 +2,7 @@
 {% load bootstrap4 %}
 
 {%  block content %} 
+    {% include 'includes/security_message.html' %}
     <h2> Добавление статьи</h2>
     <form method="POST" enctype="multipart/from-date">
         {% csrf_token %}
