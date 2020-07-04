@@ -20,18 +20,15 @@ class Author(models.Model):
 
 
 class Article(models.Model):
-
     title = models.CharField(max_length=255)
     text = models.TextField()
     likes = models.IntegerField(default=0)
     active = models.BooleanField(default=True)
     author = models.ForeignKey(Author , on_delete = models.CASCADE , related_name ="articles", null= True , blank=True ) #many to one 
     readers = models.ManyToManyField(User ,related_name = "articles", null=True , blank=True)
-    # comments = models.TextField(default = "")
-
     publication_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
-    tags = models.ManyToManyField("Tag" ,related_name="article" ,blank=True)
+    tag = models.ManyToManyField("Tag" ,related_name="article" ,blank=True)
     picture = models.ImageField(null=True , 
         blank=True , 
         upload_to="articles/" + str(datetime.today().strftime("%Y%m%d"))
@@ -39,7 +36,6 @@ class Article(models.Model):
     dislikes =  models.IntegerField(default=0)
     views = models.IntegerField(default=0)
     reposts = models.IntegerField(default=0)
- 
     
     def __str__(self):
         return self.title 
@@ -63,8 +59,12 @@ class Comment(models.Model):
         verbose_name_plural = "комментарии"
         ordering = ["user"]
 
+
 class Tag (models.Model):
     name = models.CharField(max_length=55)
+
+    def __str__(self):
+        return self.title 
 
     class Meta:
         verbose_name = "тег" 

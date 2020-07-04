@@ -4,11 +4,13 @@
 {%  block content %} 
     {% include "includes/message.html" %}
     <h2> {{article.title}}</h2>
-  
+    {% if article.tag %}
        {% for tag in article.tag.all %}
-          <button> {{ tag.name}}</button>
+            <a href="{% url 'articles' tag.name %}" class="btn btn-info">{{tag.name}}</a>
        {% endfor %}
-   
+       <br>
+       <br>
+    {% endif%}
     <div>
         {{article.text|linebreaks}}
     </div>
