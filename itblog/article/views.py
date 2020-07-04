@@ -112,6 +112,8 @@ def add_article(request):
             article.title = form.cleaned_data["title"]
             article.text = form.cleaned_data["text"]
             article.picture = form.cleaned_data["picture"]
+            article.save()
+            
 
             tags = form.cleaned_data["tags"]
             for tag in  tags.split(","):
